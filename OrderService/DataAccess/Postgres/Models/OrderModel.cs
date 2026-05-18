@@ -2,6 +2,7 @@
 {
     public class OrderModel
     {
+        public int Id { get; set; }
         public long ProductId { get; set; }
         public int Amount { get; set; }
         public string EmailClient { get; set; } = string.Empty;

@@ -21,3 +21,7 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
     ports:
       - "8082:8080"
+
+  postgres-db:
+     ports:
+      - "5433:5432"  

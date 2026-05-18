@@ -21,6 +21,7 @@ namespace OrderService.WebAPI
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+            builder.Services.AddSingleton<OrderMapper>();
 
             var app = builder.Build();
 
