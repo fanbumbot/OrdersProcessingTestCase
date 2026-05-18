@@ -15,10 +15,14 @@ namespace OrderService.WebAPI.Controllers
             _orderService = orderService;
         }
 
-        [HttpGet(Name = "GetOrderInfo")]
+        [HttpGet("{order_id}", Name = "GetOrderInfo")]
         public IActionResult GetOrderInfo([FromRoute] int order_id)
         {
             var orderReport = _orderService.GetAsync(order_id);
+            if (orderReport == null)
+            {
+                return NotFound();
+            }
             return Ok(orderReport);
         }
     }
