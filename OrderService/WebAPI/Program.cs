@@ -1,5 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using OrderService.DataAccess.Postgres;
+using OrderService.WebAPI.UseCases;
 
-namespace OrderService
+namespace OrderService.WebAPI
 {
     public class Program
     {
@@ -13,6 +16,11 @@ namespace OrderService
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped<IOrderUseCase, OrderUseCase>();
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
             var app = builder.Build();
 
