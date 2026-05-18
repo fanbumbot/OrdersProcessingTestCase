@@ -1,0 +1,60 @@
+services:
+  order_service:
+    image: ${DOCKER_REGISTRY-}order_service
+    build:
+      context: .
+      dockerfile: OrderService/Dockerfile
+    depends_on:
+      - payment_service
+      - notification_service
+      - postgres-db
+      - kafka
+
+  payment_service:
+    image: ${DOCKER_REGISTRY-}payment_service
+    build:
+      context: .
+      dockerfile: PaymentService/Dockerfile
+    depends_on:
+      - notification_service
+      - postgres-db
+      - kafka
+
+  notification_service:
+    image: ${DOCKER_REGISTRY-}notification_service
+    build:
+      context: .
+      dockerfile: NotificationService/Dockerfile
+    depends_on:
+      - kafka
+
+  postgres-db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT'
+      KAFKA_LISTENERS: 'PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093,PLAINTEXT_HOST://0.0.0.0:29092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092'
+
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REREPLICATION_FACTOR: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka:29093'
+      KAFKA_INTER_BROKER_LISTENER_NAME: 'PLAINTEXT'
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+      CLUSTER_ID: 'ZGI1NTk0YmY3NzVjNDk5MD'
+
+volumes:
+  postgres_data:
