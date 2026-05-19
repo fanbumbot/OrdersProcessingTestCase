@@ -5,8 +5,13 @@
         protected NotFoundException(string message) : base(message) { }
     }
 
-    public abstract class ValidationException : Exception
+    public class ValidationException : Exception
     {
-        protected ValidationException(string message) : base(message) { }
+        public IDictionary<string, string[]> Errors { get; }
+        public ValidationException(IDictionary<string, string[]> errors) :
+            base("One or more parameters does not pass validation")
+        {
+            Errors = errors;
+        }
     }
 }

@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using OrderService.DataAccess.Postgres;
 using OrderService.WebAPI.UseCases;
@@ -10,7 +11,13 @@ namespace OrderService.WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
+            builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+
+            builder.Services.AddControllers(options =>
+            {
+                Microsoft.AspNetCore.Mvc.Filters.IFilterMetadata filterMetadata = options.Filters.Add<ValidationFilter>();
+            });
+
             builder.Services.AddExceptionHandler<ExceptionHandler>();
             builder.Services.AddProblemDetails();
             builder.Services.AddEndpointsApiExplorer();
