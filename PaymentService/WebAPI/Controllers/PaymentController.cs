@@ -22,6 +22,13 @@ namespace PaymentService.WebAPI.Controllers
             return Ok(paymentId);
         }
 
+        [HttpPut("/updateStatus/{paymentId}/{status}", Name = "UpdatePaymentStatus")]
+        public IActionResult UpdatePaymentStatus([FromRoute] int paymentId, [FromRoute] bool status)
+        {
+            _paymentService.UpdateStatus(paymentId, status);
+            return Ok(paymentId);
+        }
+
         [HttpGet("{paymentId}", Name = "GetPaymentInfo")]
         public IActionResult GetPaymentInfo([FromRoute] int paymentId)
         {

@@ -7,6 +7,7 @@ namespace PaymentService.WebAPI.UseCases
     public interface IPaymentUseCases
     {
         public int Create(PaymentCreateDto createDto);
+        public void UpdateStatus(int paymentId, bool status);
         public PaymentGetDto? Get(int paymentId);
     }
 
@@ -28,6 +29,17 @@ namespace PaymentService.WebAPI.UseCases
             _context.SaveChanges();
             var modelId = model.Id;
             return modelId;
+        }
+
+        public void UpdateStatus(int paymentId, bool status)
+        {
+            var model = _context.Payments.Find(paymentId);
+            if (model == null)
+            {
+                throw new PaymentNotFoundException(paymentId);
+            }
+            model.Status = status;
+            _context.SaveChanges();
         }
 
         public PaymentGetDto? Get(int paymentId)
