@@ -15,10 +15,24 @@ namespace OrderService.WebAPI.Controllers
             _orderService = orderService;
         }
 
-        [HttpGet("{order_id}", Name = "GetOrderInfo")]
-        public IActionResult GetOrderInfo([FromRoute] int order_id)
+        [HttpPost("/create", Name = "CreateOrder")]
+        public IActionResult CreateOrder([FromBody] OrderCreateDto createDto)
         {
-            var orderReport = _orderService.GetAsync(order_id);
+            var orderId = _orderService.Create(createDto);
+            return Ok(orderId);
+        }
+
+        [HttpDelete("{orderId}", Name = "DeleteOrder")]
+        public IActionResult DeleteOrder([FromRoute] int orderId)
+        {
+            _orderService.Delete(orderId);
+            return Ok();
+        }
+
+        [HttpGet("{orderId}", Name = "GetOrderInfo")]
+        public IActionResult GetOrderInfo([FromRoute] int orderId)
+        {
+            var orderReport = _orderService.Get(orderId);
             if (orderReport == null)
             {
                 return NotFound();

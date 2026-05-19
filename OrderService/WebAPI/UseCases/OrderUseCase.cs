@@ -6,7 +6,9 @@ namespace OrderService.WebAPI.UseCases
 {
     public interface IOrderUseCase
     {
-        public OrderGetDto? GetAsync(int order_id);
+        public int Create(OrderCreateDto createDto);
+        public void Delete(int OrderId);
+        public OrderGetDto? Get(int orderId);
     }
 
     public class OrderUseCase : IOrderUseCase
@@ -19,9 +21,29 @@ namespace OrderService.WebAPI.UseCases
             _mapper = mapper;
         }
 
-        public OrderGetDto? GetAsync(int order_id)
+        public int Create(OrderCreateDto createDto)
         {
-            var model = _context.Orders.FirstOrDefault(o => o.Id == order_id);
+            OrderModel model = _mapper.MapCreateDtoToModel(createDto);
+            _context.Orders.Add(model);
+            _context.SaveChanges();
+            var modelId = model.Id;
+            return modelId;
+        }
+
+        public void Delete(int orderId)
+        {
+            var model = _context.Orders.Find(orderId);
+            if (model == null)
+            {
+                throw new OrderNotFoundException(orderId);
+            }
+            _context.Orders.Remove(model);
+            _context.SaveChanges();
+        }
+
+        public OrderGetDto? Get(int orderId)
+        {
+            var model = _context.Orders.Find(orderId);
             return _mapper.MapModelToGetDto(model);
         }
     }
