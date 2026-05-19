@@ -11,11 +11,11 @@ namespace OrderService.WebAPI.UseCases
         public OrderGetDto? Get(int orderId);
     }
 
-    public class OrderUseCase : IOrderUseCase
+    public class OrderUseCases : IOrderUseCase
     {
         AppDbContext _context;
         OrderMapper _mapper;
-        public OrderUseCase(AppDbContext context, OrderMapper mapper)
+        public OrderUseCases(AppDbContext context, OrderMapper mapper)
         {
             _context = context;
             _mapper = mapper;

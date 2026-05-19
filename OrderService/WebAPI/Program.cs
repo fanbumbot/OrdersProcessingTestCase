@@ -23,7 +23,7 @@ namespace OrderService.WebAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddScoped<IOrderUseCase, OrderUseCase>();
+            builder.Services.AddScoped<IOrderUseCase, OrderUseCases>();
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
