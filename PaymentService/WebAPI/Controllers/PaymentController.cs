@@ -26,10 +26,6 @@ namespace PaymentService.WebAPI.Controllers
         public IActionResult GetPaymentInfo([FromRoute] int paymentId)
         {
             var paymentReport = _paymentService.Get(paymentId);
-            if (paymentReport == null)
-            {
-                return NotFound();
-            }
             return Ok(paymentReport);
         }
     }

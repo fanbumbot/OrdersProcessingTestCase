@@ -33,10 +33,6 @@ namespace OrderService.WebAPI.Controllers
         public IActionResult GetOrderInfo([FromRoute] int orderId)
         {
             var orderReport = _orderService.Get(orderId);
-            if (orderReport == null)
-            {
-                return NotFound();
-            }
             return Ok(orderReport);
         }
     }
