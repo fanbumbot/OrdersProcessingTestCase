@@ -7,6 +7,6 @@ namespace OrderService.WebAPI.UseCases
     public partial class OrderMapper
     {
         [MapperIgnoreSource(nameof(OrderModel.Id))]
-        public partial OrderReport? MapToReport(OrderModel? order);
+        public partial OrderGetDto? MapModelToGetDto(OrderModel? order);
     }
 }

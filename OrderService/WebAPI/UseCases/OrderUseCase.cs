@@ -6,7 +6,7 @@ namespace OrderService.WebAPI.UseCases
 {
     public interface IOrderUseCase
     {
-        public OrderReport? GetAsync(int order_id);
+        public OrderGetDto? GetAsync(int order_id);
     }
 
     public class OrderUseCase : IOrderUseCase
@@ -19,10 +19,10 @@ namespace OrderService.WebAPI.UseCases
             _mapper = mapper;
         }
 
-        public OrderReport? GetAsync(int order_id)
+        public OrderGetDto? GetAsync(int order_id)
         {
             var model = _context.Orders.FirstOrDefault(o => o.Id == order_id);
-            return _mapper.MapToReport(model);
+            return _mapper.MapModelToGetDto(model);
         }
     }
 }

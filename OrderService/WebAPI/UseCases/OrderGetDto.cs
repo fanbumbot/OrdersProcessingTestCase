@@ -1,6 +1,6 @@
 ﻿namespace OrderService.WebAPI.UseCases
 {
-    public class OrderReport
+    public class OrderGetDto
     {
         public long ProductId { get; set; }
         public int Amount { get; set; }
