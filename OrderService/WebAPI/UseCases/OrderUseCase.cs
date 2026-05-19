@@ -44,6 +44,10 @@ namespace OrderService.WebAPI.UseCases
         public OrderGetDto? Get(int orderId)
         {
             var model = _context.Orders.Find(orderId);
+            if (model == null)
+            {
+                throw new OrderNotFoundException(orderId);
+            }
             return _mapper.MapModelToGetDto(model);
         }
     }
