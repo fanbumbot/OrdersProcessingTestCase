@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace OrderService.WebAPI.UseCases
 {
-    public interface IOrderUseCase
+    public interface IOrderUseCases
     {
         public int Create(OrderCreateDto createDto);
         public void Delete(int OrderId);
         public OrderGetDto? Get(int orderId);
     }
 
-    public class OrderUseCases : IOrderUseCase
+    public class OrderUseCases : IOrderUseCases
     {
         AppDbContext _context;
         OrderMapper _mapper;

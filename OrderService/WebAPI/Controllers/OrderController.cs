@@ -8,9 +8,9 @@ namespace OrderService.WebAPI.Controllers
     [Route("[controller]")]
     public class OrderController : ControllerBase
     {
-        private readonly IOrderUseCase _orderService;
+        private readonly IOrderUseCases _orderService;
 
-        public OrderController(IOrderUseCase orderService)
+        public OrderController(IOrderUseCases orderService)
         {
             _orderService = orderService;
         }
