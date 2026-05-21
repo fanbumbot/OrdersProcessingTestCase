@@ -1,5 +1,7 @@
+using NotificationService.Kafka;
+using NotificationService.WebAPI.Hubs;
 
-namespace NotificationService
+namespace NotificationService.WebAPI
 {
     public class Program
     {
@@ -14,6 +16,11 @@ namespace NotificationService
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddSignalR();
+
+            builder.Services.AddHostedService<KafkaInitializer>();
+            builder.Services.AddHostedService<KafkaConsumer>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -25,6 +32,7 @@ namespace NotificationService
 
             app.UseAuthorization();
 
+            app.MapHub<NotificationHub>("/notifications");
 
             app.MapControllers();
 
