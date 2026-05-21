@@ -8,7 +8,7 @@ namespace PaymentService.WebAPI.UseCases
 {
     public sealed record CreatePaymentCommand(CreatePaymentDto createDto) : IRequest<int>;
 
-    public class CreateOrderHandler(AppDbContext context, PaymentMapper mapper) : IRequestHandler<CreatePaymentCommand, int>
+    public class CreatePaymentHandler(AppDbContext context, PaymentMapper mapper) : IRequestHandler<CreatePaymentCommand, int>
     {
         public async Task<int> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
         {
