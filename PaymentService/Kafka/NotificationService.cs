@@ -12,7 +12,6 @@ namespace PaymentService.Kafka
 
         public async Task SendPaymentStatusUpdateNotificationAsync()
         {
-            Console.WriteLine("TEEEEST");
             await _kafkaProducer.PublishAsync("notifications", "test", "hello");
         }
     }
