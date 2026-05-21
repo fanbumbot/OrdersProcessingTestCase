@@ -4,11 +4,10 @@ namespace NotificationService.WebAPI.Hubs
 {
     public interface INotificationClient
     {
-        Task ReceivePaymentStatusAsync(string message);
+        Task SendPaymentStatusAsync(string message);
     }
 
     public class NotificationHub : Hub<INotificationClient>
     {
-
     }
 }

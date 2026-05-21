@@ -73,7 +73,7 @@ namespace NotificationService.Kafka
                     }
 
                     _logger.LogInformation("New Message!: {Message}", result.Message.Value);
-                    _hubContext.Clients.All.ReceivePaymentStatusAsync(result.Message.Value);
+                    await _hubContext.Clients.All.SendPaymentStatusAsync(result.Message.Value);
 
                     _consumer.Commit(result);
                 }
