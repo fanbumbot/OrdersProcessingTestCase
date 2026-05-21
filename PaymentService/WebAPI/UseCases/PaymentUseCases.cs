@@ -15,10 +15,12 @@ namespace PaymentService.WebAPI.UseCases
     {
         AppDbContext _context;
         PaymentMapper _mapper;
-        public PaymentUseCases(AppDbContext context, PaymentMapper mapper)
+        INotificationService _notificationService;
+        public PaymentUseCases(AppDbContext context, PaymentMapper mapper, INotificationService notificationService)
         {
             _context = context;
             _mapper = mapper;
+            _notificationService = notificationService;
         }
 
         public int Create(PaymentCreateDto createDto)
@@ -40,6 +42,10 @@ namespace PaymentService.WebAPI.UseCases
             }
             model.Status = status;
             _context.SaveChanges();
+
+            Task.Run(
+                async () => await _notificationService.SendPaymentStatusUpdateNotificationAsync()
+            );
         }
 
         public PaymentGetDto? Get(int paymentId)

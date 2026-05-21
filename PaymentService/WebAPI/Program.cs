@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using PaymentService.DataAccess.Postgres;
+using PaymentService.Kafka;
 using PaymentService.WebAPI.UseCases;
 
 namespace PaymentService.WebAPI
@@ -24,6 +25,8 @@ namespace PaymentService.WebAPI
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<IPaymentUseCases, PaymentUseCases>();
+            builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
+            builder.Services.AddSingleton<INotificationService, NotificationService>();
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
