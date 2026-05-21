@@ -2,7 +2,7 @@
 
 namespace OrderService.WebAPI.UseCases
 {
-    public record OrderCreateDto
+    public record CreateOrderDto
     {
         public required long ProductId { get; init; }
         public required int Amount { get; init; }
@@ -11,9 +11,9 @@ namespace OrderService.WebAPI.UseCases
         public required string PhoneNumber { get; init; }
     }
 
-    public class OrderCreateDtoValidator : AbstractValidator<OrderCreateDto>
+    public class CreateOrderDtoValidator : AbstractValidator<CreateOrderDto>
     {
-        public OrderCreateDtoValidator()
+        public CreateOrderDtoValidator()
         {
             RuleFor(x => x.ProductId)
                 .NotEmpty().WithMessage("Необходимо указать ID товара");

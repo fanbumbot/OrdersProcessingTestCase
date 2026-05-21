@@ -18,12 +18,12 @@ namespace OrderService.WebAPI
                 Microsoft.AspNetCore.Mvc.Filters.IFilterMetadata filterMetadata = options.Filters.Add<ValidationFilter>();
             });
 
+            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
             builder.Services.AddExceptionHandler<ExceptionHandler>();
             builder.Services.AddProblemDetails();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
-            builder.Services.AddScoped<IOrderUseCases, OrderUseCases>();
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));

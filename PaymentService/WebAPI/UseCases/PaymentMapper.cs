@@ -8,11 +8,11 @@ namespace PaymentService.WebAPI.UseCases
     {
         [MapperIgnoreTarget(nameof(PaymentModel.Id))]
         [MapperIgnoreTarget(nameof(PaymentModel.Status))]
-        public partial PaymentModel MapCreateDtoToModel(PaymentCreateDto payment, DateTime timestamp);
+        public partial PaymentModel MapCreateDtoToModel(CreatePaymentDto payment, DateTime timestamp);
 
         [MapperIgnoreSource(nameof(PaymentModel.Id))]
         [MapperIgnoreSource(nameof(PaymentModel.OrderId))]
-        [MapProperty(nameof(PaymentModel.Timestamp), nameof(PaymentGetDto.DateCreate))]
-        public partial PaymentGetDto? MapModelToGetDto(PaymentModel? payment);
+        [MapProperty(nameof(PaymentModel.Timestamp), nameof(GetPaymentDto.DateCreate))]
+        public partial GetPaymentDto? MapModelToGetDto(PaymentModel? payment);
     }
 }

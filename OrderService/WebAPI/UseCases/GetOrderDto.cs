@@ -1,6 +1,6 @@
 ﻿namespace OrderService.WebAPI.UseCases
 {
-    public record OrderGetDto
+    public record GetOrderDto
     {
         public required long ProductId { get; init; }
         public required int Amount { get; init; }

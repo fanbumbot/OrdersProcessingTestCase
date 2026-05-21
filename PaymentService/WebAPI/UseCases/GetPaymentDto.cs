@@ -1,6 +1,6 @@
 ﻿namespace PaymentService.WebAPI.UseCases
 {
-    public record PaymentGetDto
+    public record GetPaymentDto
     {
         public required decimal Price { get; init; }
         public required bool Status { get; init; }

@@ -1,6 +1,8 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 using OrderService.WebAPI.UseCases;
+using System.Threading;
 
 namespace OrderService.WebAPI.Controllers
 {
@@ -8,31 +10,31 @@ namespace OrderService.WebAPI.Controllers
     [Route("[controller]")]
     public class OrderController : ControllerBase
     {
-        private readonly IOrderUseCases _orderService;
+        private readonly ISender _mediator;
 
-        public OrderController(IOrderUseCases orderService)
+        public OrderController(ISender mediator)
         {
-            _orderService = orderService;
+            _mediator = mediator;
         }
 
         [HttpPost("/create", Name = "CreateOrder")]
-        public IActionResult CreateOrder([FromBody] OrderCreateDto createDto)
+        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createDto, CancellationToken cancellationToken)
         {
-            var orderId = _orderService.Create(createDto);
+            var orderId = await _mediator.Send(new CreateOrderCommand(createDto), cancellationToken);
             return Ok(orderId);
         }
 
         [HttpDelete("{orderId}", Name = "DeleteOrder")]
-        public IActionResult DeleteOrder([FromRoute] int orderId)
+        public async Task<IActionResult> DeleteOrder([FromRoute] int orderId, CancellationToken cancellationToken)
         {
-            _orderService.Delete(orderId);
+            await _mediator.Send(new DeleteOrderCommand(orderId), cancellationToken);
             return Ok();
         }
 
-        [HttpGet("{orderId}", Name = "GetOrderInfo")]
-        public IActionResult GetOrderInfo([FromRoute] int orderId)
+        [HttpGet("{orderId}", Name = "GetOrderById")]
+        public async Task<IActionResult> GetOrderInfo([FromRoute] int orderId, CancellationToken cancellationToken)
         {
-            var orderReport = _orderService.Get(orderId);
+            var orderReport = await _mediator.Send(new GetOrderByIdQuery(orderId), cancellationToken);
             return Ok(orderReport);
         }
     }

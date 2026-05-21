@@ -2,15 +2,15 @@
 
 namespace PaymentService.WebAPI.UseCases
 {
-    public record PaymentCreateDto
+    public record CreatePaymentDto
     {
         public required int OrderId { get; init; }
         public required decimal Price { get; init; }
     }
 
-    public class PaymentCreateDtoValidator : AbstractValidator<PaymentCreateDto>
+    public class CreatePaymentDtoValidator : AbstractValidator<CreatePaymentDto>
     {
-        public PaymentCreateDtoValidator()
+        public CreatePaymentDtoValidator()
         {
             RuleFor(x => x.OrderId)
                 .NotEmpty().WithMessage("Необходимо указать ID заказа");

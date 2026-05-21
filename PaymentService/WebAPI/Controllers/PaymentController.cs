@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 using PaymentService.WebAPI.UseCases;
@@ -8,32 +9,32 @@ namespace PaymentService.WebAPI.Controllers
     [Route("[controller]")]
     public class PaymentController : ControllerBase
     {
-        private readonly IPaymentUseCases _paymentService;
+        private readonly ISender _mediator;
 
-        public PaymentController(IPaymentUseCases paymentService)
+        public PaymentController(ISender mediator)
         {
-            _paymentService = paymentService;
+            _mediator = mediator;
         }
 
         [HttpPost("/create", Name = "CreatePayment")]
-        public IActionResult CreatePayment([FromBody] PaymentCreateDto createDto)
+        public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentDto createDto, CancellationToken cancellationToken)
         {
-            var paymentId = _paymentService.Create(createDto);
+            var paymentId = await _mediator.Send(new CreatePaymentCommand(createDto), cancellationToken);
             return Ok(paymentId);
         }
 
         [HttpPut("/updateStatus/{paymentId}/{status}", Name = "UpdatePaymentStatus")]
-        public IActionResult UpdatePaymentStatus([FromRoute] int paymentId, [FromRoute] bool status)
+        public async Task<IActionResult> UpdatePaymentStatus([FromRoute] int paymentId, [FromRoute] bool status, CancellationToken cancellationToken)
         {
-            _paymentService.UpdateStatus(paymentId, status);
-            return Ok(paymentId);
+            await _mediator.Send(new UpdatePaymentStatusCommand(paymentId, status), cancellationToken);
+            return Ok();
         }
 
-        [HttpGet("{paymentId}", Name = "GetPaymentInfo")]
-        public IActionResult GetPaymentInfo([FromRoute] int paymentId)
+        [HttpGet("{paymentId}", Name = "GetPaymentById")]
+        public async Task<IActionResult> GetPaymentInfo([FromRoute] int paymentId, CancellationToken cancellationToken)
         {
-            var paymentReport = _paymentService.Get(paymentId);
-            return Ok(paymentReport);
+            var payment = await _mediator.Send(new GetPaymentByIdQuery(paymentId), cancellationToken);
+            return Ok(payment);
         }
     }
 }
