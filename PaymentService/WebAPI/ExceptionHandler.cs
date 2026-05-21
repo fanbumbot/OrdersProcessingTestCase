@@ -5,6 +5,9 @@ using FluentValidation;
 
 namespace PaymentService.WebAPI
 {
+    /// <summary>
+    /// Обработчик исключений
+    /// </summary>
     public class ExceptionHandler : IExceptionHandler
     {
         private readonly ILogger<ExceptionHandler> _logger;
@@ -14,6 +17,13 @@ namespace PaymentService.WebAPI
             _logger = logger;
         }
 
+        /// <summary>
+        /// Обработчик исключений
+        /// </summary>
+        /// <param name="httpContext">Контекст REST/HTTP</param>
+        /// <param name="exception">Информация об исключении</param>
+        /// <param name="cancellationToken">Переменная для остановки задачи</param>
+        /// <returns>Всегда true</returns>
         public async ValueTask<bool> TryHandleAsync(
             HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {

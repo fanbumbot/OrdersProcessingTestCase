@@ -7,6 +7,10 @@ using System.Threading;
 
 namespace NotificationService.Kafka
 {
+    /// <summary>
+    /// Универсальный Kafka consumer
+    /// Асинхронно получает сообщения из Kafka
+    /// </summary>
     public class KafkaConsumer : BackgroundService
     {
         private readonly IConsumer<string, string> _consumer;
@@ -42,6 +46,10 @@ namespace NotificationService.Kafka
                 .Build();
         }
 
+        /// <summary>
+        /// Запустить асинхрноо цикл получения информации из Kafka
+        /// </summary>
+        /// <param name="stoppingToken">Переменная для остановки задачи</param>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             await Task.Delay(5000, stoppingToken);

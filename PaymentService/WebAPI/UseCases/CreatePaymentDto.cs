@@ -2,12 +2,18 @@
 
 namespace PaymentService.WebAPI.UseCases
 {
+    /// <summary>
+    /// DTO для создания платежа
+    /// </summary>
     public record CreatePaymentDto
     {
         public required int OrderId { get; init; }
         public required decimal Price { get; init; }
     }
 
+    /// <summary>
+    /// Валидатор DTO создания платежа
+    /// </summary>
     public class CreatePaymentDtoValidator : AbstractValidator<CreatePaymentDto>
     {
         public CreatePaymentDtoValidator()

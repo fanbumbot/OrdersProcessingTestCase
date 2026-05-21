@@ -6,6 +6,9 @@
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
 
+    /// <summary>
+    /// Класс-инициализатор Kafka
+    /// </summary>
     public class KafkaInitializer : IHostedService
     {
         private readonly IConfiguration _config;
@@ -18,6 +21,11 @@
             _logger = logger;
         }
 
+        /// <summary>
+        /// Запуск инициализации Kafka
+        /// В неё входит создания топика с нескольких попыток
+        /// </summary>
+        /// <param name="cancellationToken">Переменная для остановки задачи</param>
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Start Kafka initialization");

@@ -1,5 +1,8 @@
 ﻿namespace OrderService.WebAPI.UseCases
 {
+    /// <summary>
+    /// DTO для получение информации о заказе
+    /// </summary>
     public record GetOrderDto
     {
         public required long ProductId { get; init; }

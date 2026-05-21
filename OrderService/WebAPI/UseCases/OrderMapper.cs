@@ -3,6 +3,9 @@ using OrderService.DataAccess.Postgres.Models;
 
 namespace OrderService.WebAPI.UseCases
 {
+    /// <summary>
+    /// Маппер для заказов (DTO, модель БД)
+    /// </summary>
     [Mapper]
     public partial class OrderMapper
     {

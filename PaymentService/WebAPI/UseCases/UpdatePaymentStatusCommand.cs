@@ -7,8 +7,18 @@ using PaymentService.Kafka;
 
 namespace PaymentService.WebAPI.UseCases
 {
+    /// <summary>
+    /// Команда обновления статуса платежа
+    /// </summary>
+    /// <param name="paymentId">Идентификатор платежа</param>
+    /// <param name="status">Новый статус платежа</param>
     public sealed record UpdatePaymentStatusCommand(int paymentId, bool status) : IRequest;
 
+    /// <summary>
+    /// Обработчик команды обновления статуса платежа
+    /// </summary>
+    /// <param name="context">Контекст базы данных</param>
+    /// <param name="notificationService">Сервис уведомлений</param>
     public class UpdatePaymentStatusHandler(AppDbContext context, INotificationService notificationService) : IRequestHandler<UpdatePaymentStatusCommand>
     {
         public async Task Handle(UpdatePaymentStatusCommand request, CancellationToken cancellationToken)

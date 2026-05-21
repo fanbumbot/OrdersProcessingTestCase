@@ -2,6 +2,9 @@
 
 namespace OrderService.WebAPI.UseCases
 {
+    /// <summary>
+    /// DTO для создания заказа
+    /// </summary>
     public record CreateOrderDto
     {
         public required long ProductId { get; init; }
@@ -11,6 +14,9 @@ namespace OrderService.WebAPI.UseCases
         public required string PhoneNumber { get; init; }
     }
 
+    /// <summary>
+    /// Валидатор DTO для создания заказа
+    /// </summary>
     public class CreateOrderDtoValidator : AbstractValidator<CreateOrderDto>
     {
         public CreateOrderDtoValidator()

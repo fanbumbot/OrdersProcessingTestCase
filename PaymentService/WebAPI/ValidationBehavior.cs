@@ -7,6 +7,11 @@
     using System.Threading;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Валидатор для MediatR и FlientValidation
+    /// </summary>
+    /// <typeparam name="TRequest">Тип запроса</typeparam>
+    /// <typeparam name="TResponse">Тип ответа</typeparam>
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
@@ -17,6 +22,14 @@
             _validators = validators;
         }
 
+        /// <summary>
+        /// Обработчик валидатора, вызывается для команд
+        /// </summary>
+        /// <param name="request">Информация о запросе</param>
+        /// <param name="next">Следующий обработчик</param>
+        /// <param name="cancellationToken">Переменная для отмены задачи</param>
+        /// <returns>Следующий обработчик</returns>
+        /// <exception cref="ValidationException">Один или несколько параметров не прошли валидацию</exception>
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             if (_validators.Any())

@@ -8,6 +8,9 @@ namespace PaymentService.Kafka
         Task PublishAsync<T>(string topic, string key, T message) where T : class;
     }
 
+    /// <summary>
+    /// Универсальный продюсер для Kafka
+    /// </summary>
     public class KafkaProducer : IKafkaProducer, IDisposable
     {
         private readonly IProducer<string, string> _producer;
@@ -32,6 +35,13 @@ namespace PaymentService.Kafka
                 .Build();
         }
 
+        /// <summary>
+        /// Отправить сообщение через Kafka
+        /// </summary>
+        /// <typeparam name="T">Тип сообщения</typeparam>
+        /// <param name="topic">Название топика Kafka</param>
+        /// <param name="key">Ключ для Kafka</param>
+        /// <param name="message">Сообщение (данные) для передачи</param>
         public async Task PublishAsync<T>(string topic, string key, T message) where T : class
         {
             try

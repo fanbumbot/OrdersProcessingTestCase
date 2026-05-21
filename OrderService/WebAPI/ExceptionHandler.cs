@@ -5,6 +5,9 @@ using FluentValidation;
 
 namespace OrderService.WebAPI
 {
+    /// <summary>
+    /// Обработчик исключений (Middleware)
+    /// </summary>
     public class ExceptionHandler : IExceptionHandler
     {
         private readonly ILogger<ExceptionHandler> _logger;
@@ -14,6 +17,13 @@ namespace OrderService.WebAPI
             _logger = logger;
         }
 
+        /// <summary>
+        /// Метод-обработчик исключений
+        /// </summary>
+        /// <param name="httpContext">Контекст HTTP/REST</param>
+        /// <param name="exception">Информация об исключении</param>
+        /// <param name="cancellationToken">Переменная для прерывания задачи</param>
+        /// <returns>Всегда возвращает true</returns>
         public async ValueTask<bool> TryHandleAsync(
             HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {

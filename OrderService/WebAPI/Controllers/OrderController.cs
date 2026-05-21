@@ -6,6 +6,9 @@ using System.Threading;
 
 namespace OrderService.WebAPI.Controllers
 {
+    /// <summary>
+    /// REST API контроллер для заказов
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class OrderController : ControllerBase
@@ -17,6 +20,12 @@ namespace OrderService.WebAPI.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Запрос на создание нового заказа
+        /// </summary>
+        /// <param name="createDto">DTO для создания заказа</param>
+        /// <param name="cancellationToken">Переменная для отмены задачи</param>
+        /// <returns>200 - ок, 422 - ошибка валидации входных данных</returns>
         [HttpPost("create", Name = "CreateOrder")]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createDto, CancellationToken cancellationToken)
         {
@@ -24,6 +33,12 @@ namespace OrderService.WebAPI.Controllers
             return Ok(orderId);
         }
 
+        /// <summary>
+        /// Запрос на удаление заказа по идентификатору
+        /// </summary>
+        /// <param name="orderId">Идентификатор заказа</param>
+        /// <param name="cancellationToken">Переменная для отмены задачи</param>
+        /// <returns>200 - ок, 404 - заказ не найден, 422 - ошибка валидации входных данных</returns>
         [HttpDelete("{orderId}", Name = "DeleteOrder")]
         public async Task<IActionResult> DeleteOrder([FromRoute] int orderId, CancellationToken cancellationToken)
         {
@@ -31,6 +46,12 @@ namespace OrderService.WebAPI.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Запрос на получение информации о заказе по идентификатору
+        /// </summary>
+        /// <param name="orderId">Идентификатор заказа</param>
+        /// <param name="cancellationToken">Переменная для отмены задачи</param>
+        /// <returns>200 - ок, 404 - заказ не найден, 422 - ошибка валидации входных данных</returns>
         [HttpGet("{orderId}", Name = "GetOrderById")]
         public async Task<IActionResult> GetOrderInfo([FromRoute] int orderId, CancellationToken cancellationToken)
         {

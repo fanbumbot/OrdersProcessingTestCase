@@ -6,8 +6,17 @@ using PaymentService.DataAccess.Postgres.Models;
 
 namespace PaymentService.WebAPI.UseCases
 {
+    /// <summary>
+    /// Получение платежа по идентификатору
+    /// </summary>
+    /// <param name="paymentId">Идентификатор платежа</param>
     public sealed record GetPaymentByIdQuery(int paymentId) : IRequest<GetPaymentDto>;
 
+    /// <summary>
+    /// Обработчик получение данных о платеже
+    /// </summary>
+    /// <param name="context">Контекст базы данных</param>
+    /// <param name="mapper">Маппер</param>
     public class GetPaymentByIdHandler(AppDbContext context, PaymentMapper mapper) : IRequestHandler<GetPaymentByIdQuery, GetPaymentDto>
     {
         public async Task<GetPaymentDto> Handle(GetPaymentByIdQuery request, CancellationToken cancellationToken)

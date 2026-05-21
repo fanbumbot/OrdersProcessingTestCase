@@ -7,8 +7,15 @@ using PaymentService.DataAccess.Postgres.Models;
 
 namespace PaymentService.WebAPI.UseCases
 {
+    /// <summary>
+    /// Команда для создания данных о платеже о заказе
+    /// </summary>
+    /// <param name="createDto">DTO для создания</param>
     public sealed record CreatePaymentCommand(CreatePaymentDto createDto) : IRequest<int>;
 
+    /// <summary>
+    /// Валидатор данных о платеже
+    /// </summary>
     public class CreatePaymentCommandValidator : AbstractValidator<CreatePaymentCommand>
     {
         public CreatePaymentCommandValidator(IValidator<CreatePaymentDto> dtoValidator)
@@ -17,8 +24,19 @@ namespace PaymentService.WebAPI.UseCases
         }
     }
 
+    /// <summary>
+    /// Обработчик команды для создания данных о платеже
+    /// </summary>
+    /// <param name="context">Контекст базы данных</param>
+    /// <param name="mapper">Маппер</param>
     public class CreatePaymentHandler(AppDbContext context, PaymentMapper mapper) : IRequestHandler<CreatePaymentCommand, int>
     {
+        /// <summary>
+        /// Обработчик команды
+        /// </summary>
+        /// <param name="request">Команда для создания данных о платеже</param>
+        /// <param name="cancellationToken">Переменная для отмены задачи</param>
+        /// <returns>Идентификатор данных о платеже</returns>
         public async Task<int> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
         {
             var timestamp = DateTime.UtcNow;
