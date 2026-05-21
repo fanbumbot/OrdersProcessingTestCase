@@ -17,7 +17,7 @@ namespace OrderService.WebAPI.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("/create", Name = "CreateOrder")]
+        [HttpPost("create", Name = "CreateOrder")]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto createDto, CancellationToken cancellationToken)
         {
             var orderId = await _mediator.Send(new CreateOrderCommand(createDto), cancellationToken);

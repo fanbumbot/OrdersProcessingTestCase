@@ -16,14 +16,14 @@ namespace PaymentService.WebAPI.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("/create", Name = "CreatePayment")]
+        [HttpPost("create", Name = "CreatePayment")]
         public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentDto createDto, CancellationToken cancellationToken)
         {
             var paymentId = await _mediator.Send(new CreatePaymentCommand(createDto), cancellationToken);
             return Ok(paymentId);
         }
 
-        [HttpPut("/updateStatus/{paymentId}/{status}", Name = "UpdatePaymentStatus")]
+        [HttpPut("updateStatus/{paymentId}/{status}", Name = "UpdatePaymentStatus")]
         public async Task<IActionResult> UpdatePaymentStatus([FromRoute] int paymentId, [FromRoute] bool status, CancellationToken cancellationToken)
         {
             await _mediator.Send(new UpdatePaymentStatusCommand(paymentId, status), cancellationToken);
