@@ -44,28 +44,16 @@ namespace NotificationService.Kafka
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                try
-                {
-                    _consumer.Subscribe(_topic);
-                    _logger.LogInformation("Kafka consumer started with topic {Topic}", _topic);
-                    break;
-                }
-                catch (ConsumeException ex)
-                {
-                    _logger.LogWarning("Kafka topic is not ready, resubscribe in 3 seconds");
-                    Thread.Sleep(3000);
-                }
-            }
+            await Task.Delay(5000, stoppingToken);
+
+            _consumer.Subscribe(_topic);
+            _logger.LogInformation("Kafka consumer started with topic {Topic}", _topic);
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                ConsumeResult<string, string>? result = null;
                 try
                 {
-                    //result = _consumer.Consume(TimeSpan.FromMilliseconds(500));
-                    result = await Task.Run(() => _consumer.Consume(TimeSpan.FromMilliseconds(500)), stoppingToken);
+                    var result = await Task.Run(() => _consumer.Consume(stoppingToken), stoppingToken);
 
                     if (result == null)
                     {
@@ -80,6 +68,18 @@ namespace NotificationService.Kafka
                 catch (OperationCanceledException)
                 {
                     break;
+                }
+                catch (ConsumeException ex)
+                {
+                    if (ex.Error.Code == ErrorCode.UnknownTopicOrPart)
+                    {
+                        _logger.LogWarning("Topic {Topic} not found", _topic);
+                    }
+                    else
+                    {
+                        _logger.LogError("Kafka Consume Error: {Reason}", ex.Error.Reason);
+                    }
+                    await Task.Delay(5000, stoppingToken);
                 }
                 catch (Exception ex)
                 {

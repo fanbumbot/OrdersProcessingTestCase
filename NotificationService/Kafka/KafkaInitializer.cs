@@ -31,25 +31,31 @@
                 .SetErrorHandler((_, error) => _logger.LogError("AdminClient Error: {Reason}", error.Reason))
                 .Build();
 
-            try
+            for (int attempt = 0; attempt < 5; attempt++)
             {
-                var topicSpecification = new TopicSpecification
+                try
                 {
-                    Name = _topic,
-                    NumPartitions = 1,
-                    ReplicationFactor = 1
-                };
+                    var topicSpecification = new TopicSpecification
+                    {
+                        Name = _topic,
+                        NumPartitions = 1,
+                        ReplicationFactor = 1
+                    };
 
-                await adminClient.CreateTopicsAsync(new[] { topicSpecification });
-                _logger.LogInformation("Topic '{Topic}' has been created", _topic);
-            }
-            catch (CreateTopicsException e) when (e.Results.Any(r => r.Error.Code == ErrorCode.TopicAlreadyExists))
-            {
-                _logger.LogInformation("Topic '{Topic}' is already existed. Skip", _topic);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Critical error with Kafka initialization: {Message}", ex.Message);
+                    await adminClient.CreateTopicsAsync(new[] { topicSpecification });
+                    _logger.LogInformation("Topic '{Topic}' has been created", _topic);
+                    break;
+                }
+                catch (CreateTopicsException e) when (e.Results.Any(r => r.Error.Code == ErrorCode.TopicAlreadyExists))
+                {
+                    _logger.LogInformation("Topic '{Topic}' is already existed. Skip", _topic);
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Critical error with Kafka initialization (attempt {Attempt}): {Message}", attempt, ex.Message);
+                    await Task.Delay(3000, cancellationToken);
+                }
             }
         }
 
