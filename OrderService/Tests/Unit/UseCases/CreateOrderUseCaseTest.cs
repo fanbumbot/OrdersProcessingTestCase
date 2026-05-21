@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using OrderService.DataAccess.Postgres;
+using OrderService.Tests.Unit.Mock;
 using OrderService.WebAPI.UseCases;
 
 namespace OrderService.Tests.Unit.UseCases
@@ -20,7 +21,8 @@ namespace OrderService.Tests.Unit.UseCases
 
             _dbContext = new AppDbContext(options);
             var mapper = new OrderMapper();
-            _handler = new CreateOrderHandler(_dbContext, mapper);
+            var paymentServiceClient = new FakePaymentServiceClient();
+            _handler = new CreateOrderHandler(_dbContext, mapper, paymentServiceClient);
         }
 
         [Test]

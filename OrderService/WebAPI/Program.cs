@@ -1,7 +1,9 @@
 using FluentValidation;
 using MediatR;
+using Refit;
 using Microsoft.EntityFrameworkCore;
 using OrderService.DataAccess.Postgres;
+using OrderService.WebAPI.Client;
 using OrderService.WebAPI.UseCases;
 
 namespace OrderService.WebAPI
@@ -29,6 +31,13 @@ namespace OrderService.WebAPI
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
             builder.Services.AddSingleton<OrderMapper>();
+
+            builder.Services.AddRefitClient<IPaymentServiceClient>()
+                .ConfigureHttpClient(c =>
+                {
+                    c.BaseAddress = new Uri("http://payment_service:8080");
+                    c.Timeout = TimeSpan.FromSeconds(15);
+                });
 
             var app = builder.Build();
 
