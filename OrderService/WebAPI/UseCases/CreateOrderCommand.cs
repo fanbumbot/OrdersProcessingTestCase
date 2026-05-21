@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using OrderService.DataAccess.Postgres;
@@ -8,6 +9,14 @@ using OrderService.WebAPI.Client;
 namespace OrderService.WebAPI.UseCases
 {
     public sealed record CreateOrderCommand(CreateOrderDto createDto) : IRequest<int>;
+
+    public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
+    {
+        public CreateOrderCommandValidator(IValidator<CreateOrderDto> dtoValidator)
+        {
+            RuleFor(x => x.createDto).SetValidator(dtoValidator);
+        }
+    }
 
     public class CreateOrderHandler(
         AppDbContext context,

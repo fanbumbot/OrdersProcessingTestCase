@@ -1,4 +1,5 @@
 using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using PaymentService.DataAccess.Postgres;
 using PaymentService.Kafka;
@@ -14,12 +15,12 @@ namespace PaymentService.WebAPI
 
             builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
-            builder.Services.AddControllers(options =>
-            {
-                Microsoft.AspNetCore.Mvc.Filters.IFilterMetadata filterMetadata = options.Filters.Add<ValidationFilter>();
-            });
+            builder.Services.AddControllers();
 
-            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+            builder.Services.AddMediatR(cfg => {
+                cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            });
 
             builder.Services.AddExceptionHandler<ExceptionHandler>();
             builder.Services.AddProblemDetails();

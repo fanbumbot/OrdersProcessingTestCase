@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using PaymentService.DataAccess.Postgres;
@@ -7,6 +8,14 @@ using PaymentService.DataAccess.Postgres.Models;
 namespace PaymentService.WebAPI.UseCases
 {
     public sealed record CreatePaymentCommand(CreatePaymentDto createDto) : IRequest<int>;
+
+    public class CreatePaymentCommandValidator : AbstractValidator<CreatePaymentCommand>
+    {
+        public CreatePaymentCommandValidator(IValidator<CreatePaymentDto> dtoValidator)
+        {
+            RuleFor(x => x.createDto).SetValidator(dtoValidator);
+        }
+    }
 
     public class CreatePaymentHandler(AppDbContext context, PaymentMapper mapper) : IRequestHandler<CreatePaymentCommand, int>
     {
