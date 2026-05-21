@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
+using FluentValidation;
+
 namespace OrderService.WebAPI
 {
     public class ExceptionHandler : IExceptionHandler

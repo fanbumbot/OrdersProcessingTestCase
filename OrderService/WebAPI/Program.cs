@@ -1,4 +1,5 @@
 using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OrderService.DataAccess.Postgres;
 using OrderService.WebAPI.UseCases;
@@ -13,12 +14,12 @@ namespace OrderService.WebAPI
 
             builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
-            builder.Services.AddControllers(options =>
-            {
-                Microsoft.AspNetCore.Mvc.Filters.IFilterMetadata filterMetadata = options.Filters.Add<ValidationFilter>();
-            });
+            builder.Services.AddControllers();
 
-            builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+            builder.Services.AddMediatR(cfg => {
+                cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            });
 
             builder.Services.AddExceptionHandler<ExceptionHandler>();
             builder.Services.AddProblemDetails();
