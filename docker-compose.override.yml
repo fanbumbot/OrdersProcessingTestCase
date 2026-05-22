@@ -22,9 +22,13 @@ services:
     ports:
       - "8082:8080"
 
-  postgres-db:
+  orders-db:
     ports:
-    - "5433:5432"  
+    - "5433:5432"
+
+  payments-db:
+    ports:
+    - "5434:5432"
 
   kafka:
     ports:

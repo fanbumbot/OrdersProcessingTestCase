@@ -7,7 +7,7 @@ services:
     depends_on:
       - payment_service
       - notification_service
-      - postgres-db
+      - orders-db
       - kafka
 
   payment_service:
@@ -17,7 +17,7 @@ services:
       dockerfile: PaymentService/Dockerfile
     depends_on:
       - notification_service
-      - postgres-db
+      - payments-db
       - kafka
 
   notification_service:
@@ -28,14 +28,23 @@ services:
     depends_on:
       - kafka
 
-  postgres-db:
+  orders-db:
     image: postgres:16-alpine
     environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_ORDERS_USER}
+      - POSTGRES_PASSWORD=${DB_ORDERS_PASSWORD}
+      - POSTGRES_DB=${DB_ORDERS_NAME}
     volumes:
-      - postgres_data:/var/lib/postgresql/data 
+      - orders_db_data:/var/lib/postgresql/data 
+
+  payments-db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=${DB_PAYMENTS_USER}
+      - POSTGRES_PASSWORD=${DB_PAYMENTS_PASSWORD}
+      - POSTGRES_DB=${DB_PAYMENTS_NAME}
+    volumes:
+      - payments_db_data:/var/lib/postgresql/data 
 
   kafka:
     image: confluentinc/cp-kafka:7.6.0
@@ -57,4 +66,5 @@ services:
       CLUSTER_ID: 'ZGI1NTk0YmY3NzVjNDk5MD'
 
 volumes:
-  postgres_data:
+  orders_db_data:
+  payments_db_data:  

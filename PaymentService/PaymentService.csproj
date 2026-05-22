@@ -29,7 +29,6 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DataAccess\Postgres\Configurations\" />
     <Folder Include="DataAccess\Postgres\Migrations\" />
   </ItemGroup>
 
