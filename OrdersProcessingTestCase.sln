@@ -3,17 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService", "OrderService\OrderService.csproj", "{E92ADAF5-066C-48C5-A8BB-21E82F8E3036}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService", "OrderService\OrderService.csproj", "{E92ADAF5-066C-48C5-A8BB-21E82F8E3036}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentService", "PaymentService\PaymentService.csproj", "{BDCD0E6F-B77B-4A03-B663-BDC1BD186768}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaymentService", "PaymentService\PaymentService.csproj", "{BDCD0E6F-B77B-4A03-B663-BDC1BD186768}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService", "NotificationService\NotificationService.csproj", "{176C2D22-03DE-489D-9EBA-FA66CCC8684D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationService", "NotificationService\NotificationService.csproj", "{176C2D22-03DE-489D-9EBA-FA66CCC8684D}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2BCF49AE-63BC-4ED7-80EA-2CB180AA2D5D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{1084681A-870B-4E71-A5B5-59CE25E155FB}"
 	ProjectSection(SolutionItems) = preProject
 		.env = .env
+		.env_template = .env_template
 		README.md = README.md
 	EndProjectSection
 EndProject
