@@ -5,6 +5,6 @@
     /// </summary>
     public interface INotificationService
     {
-        public Task SendPaymentStatusUpdateNotificationAsync();
+        public Task SendPaymentStatusUpdateNotificationAsync(int paymentId, bool status);
     }
 }

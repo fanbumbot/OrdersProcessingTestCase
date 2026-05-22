@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace NotificationService.WebAPI.Hubs
+namespace NotificationService.Notification.WebSocketHubs
 {
+
     /// <summary>
     /// Интерфейс для хаба Kafka для уведомлений
     /// </summary>
     public interface INotificationClient
     {
-        Task SendPaymentStatusAsync(string message);
+        Task SendPaymentStatusAsync(WebSocketPaymentNotification notification);
     }
 
     /// <summary>

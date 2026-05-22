@@ -1,5 +1,8 @@
 ﻿using PaymentService.WebAPI.UseCases;
 
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 namespace PaymentService.Kafka
 {
     /// <summary>
@@ -17,9 +20,10 @@ namespace PaymentService.Kafka
         /// <summary>
         /// Отправление сообщения через Kafka
         /// </summary>
-        public async Task SendPaymentStatusUpdateNotificationAsync()
+        public async Task SendPaymentStatusUpdateNotificationAsync(int paymentId, bool status)
         {
-            await _kafkaProducer.PublishAsync("notifications", "test", "hello");
+            var notification = new KafkaNotification { paymentId = paymentId, status = status };
+            await _kafkaProducer.PublishAsync("notifications", "PaymentStatusUpdate", notification);
         }
     }
 }

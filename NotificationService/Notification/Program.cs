@@ -1,5 +1,6 @@
 using NotificationService.Kafka;
-using NotificationService.WebAPI.Hubs;
+using NotificationService.Notification;
+using NotificationService.Notification.WebSocketHubs;
 
 namespace NotificationService.WebAPI
 {
@@ -13,6 +14,9 @@ namespace NotificationService.WebAPI
 
             builder.Services.AddSignalR();
 
+
+            builder.Services.AddSingleton<NotificationMapper>();
+            builder.Services.AddSingleton<INotificationHandler, NotificationHandler>();
             builder.Services.AddHostedService<KafkaInitializer>();
             builder.Services.AddHostedService<KafkaConsumer>();
 

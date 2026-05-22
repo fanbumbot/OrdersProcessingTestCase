@@ -1,9 +1,5 @@
 ﻿using Confluent.Kafka;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Logging;
-using NotificationService.WebAPI.Hubs;
-using System.Text.Json;
-using System.Threading;
+using NotificationService.Notification;
 
 namespace NotificationService.Kafka
 {
@@ -17,19 +13,20 @@ namespace NotificationService.Kafka
         private readonly ILogger<KafkaConsumer> _logger;
         private readonly IServiceProvider _serviceProvider;
         private readonly string _topic;
-        private readonly IHubContext<NotificationHub, INotificationClient> _hubContext;
+
+        private readonly INotificationHandler _handler;
 
         public KafkaConsumer(
             IConfiguration config,
             ILogger<KafkaConsumer> logger,
             IServiceProvider serviceProvider,
-            IHubContext<NotificationHub, INotificationClient> hubContext
+            INotificationHandler handler
         )
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
             _topic = "notifications";
-            _hubContext = hubContext;
+            _handler = handler;
 
             var consumerConfig = new ConsumerConfig
             {
@@ -68,8 +65,7 @@ namespace NotificationService.Kafka
                         continue;
                     }
 
-                    _logger.LogInformation("Notification: {Message}", result.Message.Value);
-                    await _hubContext.Clients.All.SendPaymentStatusAsync(result.Message.Value);
+                    await _handler.HandleRawNotificationAsync(result.Message);
 
                     _consumer.Commit(result);
                 }

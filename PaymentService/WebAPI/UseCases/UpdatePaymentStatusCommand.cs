@@ -30,7 +30,7 @@ namespace PaymentService.WebAPI.UseCases
             }
             model.Status = request.status;
             await context.SaveChangesAsync();
-            await notificationService.SendPaymentStatusUpdateNotificationAsync();
+            await notificationService.SendPaymentStatusUpdateNotificationAsync(request.paymentId, request.status);
         }
     }
 }
