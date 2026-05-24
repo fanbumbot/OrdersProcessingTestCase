@@ -1,6 +1,7 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using OrderService.WebAPI;
 using PaymentService.DataAccess.Postgres;
 using PaymentService.Kafka;
 using PaymentService.WebAPI.UseCases;
@@ -17,12 +18,14 @@ namespace PaymentService.WebAPI
 
             builder.Services.AddControllers();
 
+            builder.Services.AddExceptionHandler<ExceptionHandler>();
+
             builder.Services.AddMediatR(cfg => {
                 cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
-                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+                cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
+                cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
             });
 
-            builder.Services.AddExceptionHandler<ExceptionHandler>();
             builder.Services.AddProblemDetails();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

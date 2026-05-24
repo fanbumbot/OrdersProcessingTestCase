@@ -23,12 +23,12 @@
         }
 
         /// <summary>
-        /// Обработчик валидатора, вызывается для команд
+        /// Обработка валидатора, вызывается для команд
         /// </summary>
         /// <param name="request">Информация о запросе</param>
         /// <param name="next">Следующий обработчик</param>
         /// <param name="cancellationToken">Переменная для отмены задачи</param>
-        /// <returns>Следующий обработчик</returns>
+        /// <returns>Результат выполнения запроса</returns>
         /// <exception cref="ValidationException">Один или несколько параметров не прошли валидацию</exception>
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
