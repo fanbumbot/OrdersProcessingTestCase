@@ -7,8 +7,15 @@ using System.Text.Json;
 
 namespace NotificationService.Notification
 {
+    /// <summary>
+    /// Команда для отправки уведомлений клиентам
+    /// </summary>
+    /// <param name="message">Сообщение</param>
     public sealed record SendNofiticationCommand(Message<string, string> message) : IRequest;
 
+    /// <summary>
+    /// Валидатор для уведомлений
+    /// </summary>
     public class SendNotificationCommandValidator : AbstractValidator<SendNofiticationCommand>
     {
         public SendNotificationCommandValidator()
@@ -24,8 +31,18 @@ namespace NotificationService.Notification
         }
     }
 
+    /// <summary>
+    /// Обработчик команды для отправки уведомлений клиентам
+    /// </summary>
+    /// <param name="hubContext">Hub из SignalR для WebSocket</param>
+    /// <param name="mapper">Маппер уведомлений</param>
     public class SendNotificationHandler(IHubContext<NotificationHub, INotificationClient> hubContext, NotificationMapper mapper) : IRequestHandler<SendNofiticationCommand>
     {
+        /// <summary>
+        /// Обработка команды для отправки уведомлений клиентам
+        /// </summary>
+        /// <param name="request">Запрос</param>
+        /// <param name="cancellationToken">Переменная для отмены задачи</param>
         public async Task Handle(SendNofiticationCommand request, CancellationToken cancellationToken)
         {
             var key = request.message.Key;

@@ -2,6 +2,9 @@
 
 namespace NotificationService.Notification
 {
+    /// <summary>
+    /// Маппер для уведомлений
+    /// </summary>
     [Mapper]
     public partial class NotificationMapper
     {
