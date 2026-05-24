@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 using FluentValidation;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace PaymentService.WebAPI
 {
@@ -51,6 +52,20 @@ namespace PaymentService.WebAPI
                 Detail = exception.Message,
                 Instance = httpContext.Request.Path
             };
+
+            if (exception is ValidationException ex)
+            {
+                var errorsDictionary = ex.Errors
+                    .GroupBy(e => {
+                        return e.PropertyName.Split('.').LastOrDefault() ?? e.PropertyName;
+                    })
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Select(e => e.ErrorMessage).ToArray()
+                    );
+
+                problemDetails.Extensions["errors"] = errorsDictionary;
+            }
 
             httpContext.Response.StatusCode = statusCode;
             await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
