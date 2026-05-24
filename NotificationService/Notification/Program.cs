@@ -14,9 +14,11 @@ namespace NotificationService.WebAPI
 
             builder.Services.AddSignalR();
 
+            builder.Services.AddMediatR(cfg => {
+                cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+            });
 
             builder.Services.AddSingleton<NotificationMapper>();
-            builder.Services.AddSingleton<INotificationHandler, NotificationHandler>();
             builder.Services.AddHostedService<KafkaInitializer>();
             builder.Services.AddHostedService<KafkaConsumer>();
 

@@ -1,33 +1,35 @@
 ﻿using Confluent.Kafka;
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using NotificationService.Notification.WebSocketHubs;
 using System.Text.Json;
 
 namespace NotificationService.Notification
 {
-    public interface INotificationHandler
+    public sealed record SendNofiticationCommand(Message<string, string> message) : IRequest;
+
+    public class SendNotificationCommandValidator : AbstractValidator<SendNofiticationCommand>
     {
-        public Task HandleRawNotificationAsync(Message<string, string> message);
+        public SendNotificationCommandValidator()
+        {
+            RuleFor(x => x.message)
+                .NotNull().WithMessage("Сообщение не может быть пустым");
+
+            RuleFor(x => x.message.Key)
+                .NotEmpty().WithMessage("Ключ сообщения не может быть пустым");
+
+            RuleFor(x => x.message.Value)
+                .NotEmpty().WithMessage("Содержимое сообщения не может быть пустым");
+        }
     }
 
-    public class NotificationHandler : INotificationHandler
+    public class SendNotificationHandler(IHubContext<NotificationHub, INotificationClient> hubContext, NotificationMapper mapper) : IRequestHandler<SendNofiticationCommand>
     {
-        private readonly IHubContext<NotificationHub, INotificationClient> _hubContext;
-        private readonly NotificationMapper _mapper;
-
-        public NotificationHandler(
-            IHubContext<NotificationHub, INotificationClient> hubContext,
-            NotificationMapper mapper
-        )
+        public async Task Handle(SendNofiticationCommand request, CancellationToken cancellationToken)
         {
-            _hubContext = hubContext;
-            _mapper = mapper;
-        }
-
-        public async Task HandleRawNotificationAsync(Message<string, string> message)
-        {
-            var key = message.Key;
-            var rawJson = message.Value;
+            var key = request.message.Key;
+            var rawJson = request.message.Value;
 
             if (key == "PaymentStatusUpdate")
             {
@@ -37,9 +39,11 @@ namespace NotificationService.Notification
                 };
 
                 var notification = JsonSerializer.Deserialize<KafkaPaymentNotifiaction>(rawJson, options);
-
-                var paymentNotification = _mapper.MapPayment(notification);
-                await _hubContext.Clients.All.SendPaymentStatusAsync(paymentNotification);
+                if (notification != null)
+                {
+                    var paymentNotification = mapper.MapPayment(notification);
+                    await hubContext.Clients.All.SendPaymentStatusAsync(paymentNotification);
+                }
             }
         }
     }
