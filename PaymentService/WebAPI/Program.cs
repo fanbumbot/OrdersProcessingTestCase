@@ -1,7 +1,7 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using OrderService.WebAPI;
+using PaymentService.WebAPI;
 using PaymentService.DataAccess.Postgres;
 using PaymentService.Kafka;
 using PaymentService.WebAPI.UseCases;

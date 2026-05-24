@@ -1,4 +1,4 @@
-﻿namespace OrderService.WebAPI
+﻿namespace PaymentService.WebAPI
 {
     using MediatR;
     using Microsoft.Extensions.Logging;
