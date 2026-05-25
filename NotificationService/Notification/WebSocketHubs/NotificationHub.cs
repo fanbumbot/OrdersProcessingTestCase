@@ -9,6 +9,7 @@ namespace NotificationService.Notification.WebSocketHubs
     public interface INotificationClient
     {
         Task SendPaymentStatusAsync(WebSocketPaymentNotification notification);
+        Task SendOrderAsync(WebSocketOrderNotification notification);
     }
 
     /// <summary>

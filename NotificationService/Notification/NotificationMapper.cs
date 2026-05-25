@@ -9,5 +9,6 @@ namespace NotificationService.Notification
     public partial class NotificationMapper
     {
         public partial WebSocketPaymentNotification MapPayment(KafkaPaymentNotifiaction notification);
+        public partial WebSocketOrderNotification MapOrder(KafkaOrderNotifiaction notification);
     }
 }

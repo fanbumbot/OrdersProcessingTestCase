@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using OrderService.DataAccess.Postgres;
 using OrderService.WebAPI.Client;
 using OrderService.WebAPI.UseCases;
+using OrderService.Kafka;
 
 namespace OrderService.WebAPI
 {
@@ -29,6 +30,9 @@ namespace OrderService.WebAPI
             builder.Services.AddProblemDetails();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddSingleton<IKafkaProducer, KafkaProducer>();
+            builder.Services.AddSingleton<INotificationService, NotificationService>();
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));

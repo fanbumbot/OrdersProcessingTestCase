@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using OrderService.DataAccess.Postgres;
+using OrderService.Kafka;
 using OrderService.Tests.Unit.Mock;
 using OrderService.WebAPI.UseCases;
+using PaymentService.Tests.Unit.Mock;
 
 namespace OrderService.Tests.Unit.UseCases
 {
@@ -22,7 +24,8 @@ namespace OrderService.Tests.Unit.UseCases
             _dbContext = new AppDbContext(options);
             var mapper = new OrderMapper();
             var paymentServiceClient = new FakePaymentServiceClient();
-            _handler = new CreateOrderHandler(_dbContext, mapper, paymentServiceClient);
+            var notificationService = new FakeNotificationService();
+            _handler = new CreateOrderHandler(_dbContext, mapper, paymentServiceClient, notificationService);
         }
 
         [Test]

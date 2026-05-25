@@ -48,18 +48,27 @@ namespace NotificationService.Notification
             var key = request.message.Key;
             var rawJson = request.message.Value;
 
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
             if (key == "PaymentStatusUpdate")
             {
-                var options = new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                };
-
                 var notification = JsonSerializer.Deserialize<KafkaPaymentNotifiaction>(rawJson, options);
                 if (notification != null)
                 {
                     var paymentNotification = mapper.MapPayment(notification);
                     await hubContext.Clients.All.SendPaymentStatusAsync(paymentNotification);
+                }
+            }
+            if (key == "OrderCreate")
+            {
+                var notification = JsonSerializer.Deserialize<KafkaOrderNotifiaction>(rawJson, options);
+                if (notification != null)
+                {
+                    var orderNotification = mapper.MapOrder(notification);
+                    await hubContext.Clients.All.SendOrderAsync(orderNotification);
                 }
             }
         }

@@ -34,7 +34,9 @@ namespace OrderService.WebAPI.UseCases
     public class CreateOrderHandler(
         AppDbContext context,
         OrderMapper mapper,
-        IPaymentServiceClient paymentServiceClient) :
+        IPaymentServiceClient paymentServiceClient,
+        INotificationService notificationService
+    ) :
         IRequestHandler<CreateOrderCommand, int>
     {
         /// <summary>
@@ -51,6 +53,7 @@ namespace OrderService.WebAPI.UseCases
 
             var createPaymentDto = new CreatePaymentDto { OrderId = model.Id, Price = model.Price };
             await paymentServiceClient.CreatePaymentAsync(createPaymentDto);
+            await notificationService.SendOrderCreateNotificationAsync(model.Id);
             return model.Id;
         }
     }
