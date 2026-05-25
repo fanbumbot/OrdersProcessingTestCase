@@ -22,7 +22,7 @@ namespace PaymentService.Kafka
         /// </summary>
         public async Task SendPaymentStatusUpdateNotificationAsync(int paymentId, bool status)
         {
-            var notification = new KafkaNotification { paymentId = paymentId, status = status };
+            var notification = new KafkaPaymentNotification { paymentId = paymentId, status = status };
             await _kafkaProducer.PublishAsync("notifications", "PaymentStatusUpdate", notification);
         }
     }
